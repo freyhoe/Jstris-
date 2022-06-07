@@ -8,8 +8,18 @@
 // @grant        none
 // ==/UserScript==
 
-let JSTRIS_FX = function() {
+
+(function() {
     'use strict';
+
+
+
+    let configVars = [
+        "DISABLE_LINECLEAR_ANIMATION",
+        "DISABLE_PLACE_BLOCK_ANIMATION"
+    ]
+    for (var i of configVars)
+        window[i] = localStorage.getItem(i);
 
     window.lerp = (start, end, amt) => {
         return (1-amt)*start+amt*end;
@@ -24,8 +34,10 @@ let JSTRIS_FX = function() {
         obj.GFXCanvas.width = refCanvas.width;
         obj.GFXCanvas.style = refCanvas.style;
         */
+        obj.GFXCanvas.className = "layer mainLayer gfxLayer";
         obj.GFXctx = obj.GFXCanvas.getContext("2d")
         obj.GFXctx.clearRect(0, 0, obj.GFXCanvas.width, obj.GFXCanvas.height);
+        refCanvas.parentNode.appendChild(obj.GFXCanvas);
     }
 
 
@@ -34,12 +46,16 @@ let JSTRIS_FX = function() {
         console.log("=== jstris plus loaded ===");
 
 		// -- injection below --
+        console.log(window.Game);
         if (window.Game) {
+            console.log("aowiefjeaw");
 		const oldReadyGo = Game.prototype.readyGo
         Game.prototype.readyGo = function() {
+            console.log("aoifwejawoifje")
             let val = oldReadyGo.apply(this,arguments)
 
-            if (!this.GFXCanvas) {
+            if (!this.GFXCanvas || !this.GFXCanvas.parentNode) {
+                console.log("yah");
                 window.initGFXCanvas(this, this.canvas);
             }
 
@@ -56,7 +72,6 @@ let JSTRIS_FX = function() {
                     requestAnimationFrame(this.GFXLoop);
             }
 
-            this.canvas.parentNode.appendChild(this.GFXCanvas);
 
             window.game = this;
 
@@ -67,17 +82,15 @@ let JSTRIS_FX = function() {
         if (window.SlotView) {
         const oldOnResized = SlotView.prototype.onResized;
         SlotView.prototype.onResized = function() {
-            let val = oldOnResized.apply(this,arguments);
             console.log("onResized called");
-            if (this.g.GFXCanvas) {
+            if (this.g.GFXCanvas && Replayer.prototype.isPrototypeOf(this.g) && false) {
                 console.log("onResized called on slotview with gfx canvas");
                 if (this.g.GFXCanvas.parentNode) {
                     this.g.GFXCanvas.parentNode.removeChild(this.g.GFXCanvas);
                 }
-                window.initGFXCanvas(this.g, this.canvas);
             }
 
-            return val;
+            return oldOnResized.apply(this,arguments);
         }
         }
 
@@ -92,7 +105,7 @@ let JSTRIS_FX = function() {
 
             window.replayer = this;
 
-            if (!this.GFXCanvas) {
+            if (!this.GFXCanvas || !this.GFXCanvas.parentNode || !this.GFXCanvas.parentNode == this.v.canvas.parentNode ) {
                 window.initGFXCanvas(this, this.v.canvas);
                 console.log("replayer initializing gfx canvas");
                 console.log(this.v.canvas);
@@ -121,7 +134,9 @@ let JSTRIS_FX = function() {
         const oldLineClears = GameCore.prototype.checkLineClears;
         GameCore.prototype.checkLineClears = function() {
 
-			if (!this.GFXCanvas)
+            //console.log(this.GFXCanvas);
+
+			if (!this.GFXCanvas || window.DISABLE_LINECLEAR_ANIMATION)
 				return oldLineClears.apply(this, arguments);
 
             let oldAttack = this.gamedata.attack;
@@ -198,7 +213,7 @@ let JSTRIS_FX = function() {
         const oldPlaceBlock = GameCore.prototype.placeBlock
         GameCore.prototype.placeBlock = function(col, row, time) {
 
-			if (!this.GFXCanvas)
+			if (!this.GFXCanvas || DISABLE_PLACE_BLOCK_ANIMATION)
 				return oldPlaceBlock.apply(this, arguments);
 
             const block = this.blockSets[this.activeBlock.set]
@@ -298,14 +313,22 @@ let JSTRIS_FX = function() {
         Replayer.prototype.placeBlock = GameCore.prototype.placeBlock;
 
 
+        // modal UI inject
+        //var img = document.createElement("IMG");
+        //img.src = "https://i.pinimg.com/736x/4a/a1/b0/4aa1b05b25a687d05bc807a13410b6e5.jpg";
+
+
+
     });
-};
+})();
 
 
 // https://jsfiddle.net/12aueufy/1/
 var shakingElements = [];
 
 var shake = function (element, magnitude = 16, numberOfShakes = 15, angular = false) {
+  if (!element) return;
+
   //First set the initial tilt angle to the right (+1)
   var tiltAngle = 1;
 
@@ -415,3 +438,88 @@ var shake = function (element, magnitude = 16, numberOfShakes = 15, angular = fa
   }
 
 };
+
+
+const css = `
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  -webkit-animation-name: fadeIn; /* Fade in the background */
+  -webkit-animation-duration: 0.4s;
+  animation-name: fadeIn;
+  animation-duration: 0.4s
+}
+
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  bottom: 0;
+  background-color: #fefefe;
+  width: 100%;
+  -webkit-animation-name: slideIn;
+  -webkit-animation-duration: 0.4s;
+  animation-name: slideIn;
+  animation-duration: 0.4s
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+`;
