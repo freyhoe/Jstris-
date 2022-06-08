@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name         jstris matchmaking
+// @namespace    http://tampermonkey.net/
+// @version      0.2.1
+// @description  try to take over the world!
+// @author       freyhoe
+// @match        https://jstris.jezevec10.com/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=jezevec10.com
+// @grant        none
+// ==/UserScript==
 let JSTRIS_MM = function() {
   if (typeof Live != "function") {
     return
@@ -102,6 +112,7 @@ let JSTRIS_MM = function() {
       }
     }
     ws.onmessage = (event) => {
+      console.log(event.data)
       let res = JSON.parse(event.data)
       if (res.type == "room") {
         QUEUEING = false
@@ -127,6 +138,7 @@ let JSTRIS_MM = function() {
         CONNECTED = true
         cc.prepend(plist);
         queueinfo.innerHTML = "0 In Queue"
+        console.log("JEAGUE LEAGUE CONNECTED")
       }
     };
     ws.onopen = function(event) {
@@ -141,10 +153,12 @@ let JSTRIS_MM = function() {
         }
         if (QUEUEING) {
           clearInterval(timeInc)
+          console.log("freycat dcing")
           ws.send(JSON.stringify({
             type: "disconnect"
           }))
         } else {
+          console.log("freycat connecting")
           timeInQueue = 0
           clearInterval(timeInc)
           timeInc = setInterval(updateClock, 1000)
