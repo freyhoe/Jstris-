@@ -37,79 +37,23 @@ let JSTRIS_FX = function() {
   }
 
 
-  window.addEventListener("load", function() {
+  console.log("=== jstris plus loaded ===");
 
-    console.log("=== jstris plus loaded ===");
+  // -- injection below --
+  console.log(window.Game);
+  if (window.Game) {
+    console.log("aowiefjeaw");
+    const oldReadyGo = Game.prototype.readyGo
+    Game.prototype.readyGo = function() {
+      console.log("aoifwejawoifje")
+      let val = oldReadyGo.apply(this, arguments)
 
-    // -- injection below --
-    console.log(window.Game);
-    if (window.Game) {
-      console.log("aowiefjeaw");
-      const oldReadyGo = Game.prototype.readyGo
-      Game.prototype.readyGo = function() {
-        console.log("aoifwejawoifje")
-        let val = oldReadyGo.apply(this, arguments)
-
-        if (!this.GFXCanvas || !this.GFXCanvas.parentNode) {
-          console.log("yah");
-          window.initGFXCanvas(this, this.canvas);
-        }
-
-        this.GFXQueue = [];
-
-        this.GFXLoop = () => {
-          if (!this.GFXQueue) this.GFXQueue = [];
-
-          this.GFXctx.clearRect(0, 0, this.GFXCanvas.width, this.GFXCanvas.height);
-
-          this.GFXQueue = this.GFXQueue.filter(e => e.process.call(e, this.GFXctx));
-
-          if (this.GFXQueue.length)
-            requestAnimationFrame(this.GFXLoop);
-        }
-
-
-        window.game = this;
-
-        return val;
-      }
-    }
-
-    if (window.SlotView) {
-      const oldOnResized = SlotView.prototype.onResized;
-      SlotView.prototype.onResized = function() {
-        console.log("onResized called");
-        if (this.g.GFXCanvas && Replayer.prototype.isPrototypeOf(this.g) && false) {
-          console.log("onResized called on slotview with gfx canvas");
-          if (this.g.GFXCanvas.parentNode) {
-            this.g.GFXCanvas.parentNode.removeChild(this.g.GFXCanvas);
-          }
-        }
-
-        return oldOnResized.apply(this, arguments);
-      }
-    }
-
-    // -- injection below --
-    const oldInitReplay = Replayer.prototype.initReplay
-    Replayer.prototype.initReplay = function() {
-      let val = oldInitReplay.apply(this, arguments)
-
-      // SlotViews have replayers attached to them, don't want to double up on the canvases
-      //if (SlotView.prototype.isPrototypeOf(this.v))
-      //    return;
-
-      window.replayer = this;
-
-      if (!this.GFXCanvas || !this.GFXCanvas.parentNode || !this.GFXCanvas.parentNode == this.v.canvas.parentNode) {
-        window.initGFXCanvas(this, this.v.canvas);
-        console.log("replayer initializing gfx canvas");
-        console.log(this.v.canvas);
+      if (!this.GFXCanvas || !this.GFXCanvas.parentNode) {
+        console.log("yah");
+        window.initGFXCanvas(this, this.canvas);
       }
 
       this.GFXQueue = [];
-
-      this.block_size = this.v.block_size;
 
       this.GFXLoop = () => {
         if (!this.GFXQueue) this.GFXQueue = [];
@@ -122,202 +66,255 @@ let JSTRIS_FX = function() {
           requestAnimationFrame(this.GFXLoop);
       }
 
-      this.v.canvas.parentNode.appendChild(this.GFXCanvas);
+
+      window.game = this;
 
       return val;
     }
+  }
 
-    const oldLineClears = GameCore.prototype.checkLineClears;
-    GameCore.prototype.checkLineClears = function() {
-
-      //console.log(this.GFXCanvas);
-
-      if (!this.GFXCanvas || window.DISABLE_LINECLEAR_ANIMATION)
-        return oldLineClears.apply(this, arguments);
-
-      let oldAttack = this.gamedata.attack;
-
-      for (var row = 0; row < 20; row++) {
-        var cleared = 0
-        for (var col = 0; col < 10; col++) {
-          let block = this.matrix[row][col];
-          if (9 === block) { // solid garbage
-            break;
-          };
-          if (0 !== block) {
-            cleared++
-          }
-        };
-        if (10 === cleared) {
-
-          let attack = this.gamedata.attack - oldAttack;
-
-          shake(this.GFXCanvas.parentNode, Math.min(1 + attack * 5, 50))
-
-
-
-          this.GFXQueue.push({
-            opacity: 1,
-            row,
-            blockSize: this.block_size,
-            amountParted: 0,
-            process: function(ctx) {
-              if (this.opacity <= 0)
-                return false;
-
-              var x1 = 1;
-              var x2 = this.blockSize * 5 + this.amountParted;
-              var y = 1 + this.row * this.blockSize;
-
-              // Create gradient
-              var leftGradient = ctx.createLinearGradient(0, 0, this.blockSize * 5 - this.amountParted, 0);
-              leftGradient.addColorStop(0, `rgba(255,255,255,${this.opacity})`);
-              leftGradient.addColorStop(1, `rgba(255,170,0,0)`);
-              // Fill with gradient
-              ctx.fillStyle = leftGradient;
-              ctx.fillRect(x1, y, this.blockSize * 5 - this.amountParted, this.blockSize);
-
-              // Create gradient
-              var rightGradient = ctx.createLinearGradient(0, 0, this.blockSize * 5 - this.amountParted, 0);
-              rightGradient.addColorStop(0, `rgba(255,170,0,0)`);
-              rightGradient.addColorStop(1, `rgba(255,255,255,${this.opacity})`);
-              // Fill with gradient
-              ctx.fillStyle = rightGradient;
-              ctx.fillRect(x2, y, this.blockSize * 5 - this.amountParted, this.blockSize);
-
-              this.amountParted = window.lerp(this.amountParted, this.blockSize * 5, 0.3);
-              this.opacity -= 0.07;
-
-              return true;
-            }
-
-          })
+  if (window.SlotView) {
+    const oldOnResized = SlotView.prototype.onResized;
+    SlotView.prototype.onResized = function() {
+      console.log("onResized called");
+      if (this.g.GFXCanvas && Replayer.prototype.isPrototypeOf(this.g) && false) {
+        console.log("onResized called on slotview with gfx canvas");
+        if (this.g.GFXCanvas.parentNode) {
+          this.g.GFXCanvas.parentNode.removeChild(this.g.GFXCanvas);
         }
       }
+
+      return oldOnResized.apply(this, arguments);
+    }
+  }
+
+  // -- injection below --
+  const oldInitReplay = Replayer.prototype.initReplay
+  Replayer.prototype.initReplay = function() {
+    let val = oldInitReplay.apply(this, arguments)
+
+    // SlotViews have replayers attached to them, don't want to double up on the canvases
+    //if (SlotView.prototype.isPrototypeOf(this.v))
+    //    return;
+
+    window.replayer = this;
+
+    if (!this.GFXCanvas || !this.GFXCanvas.parentNode || !this.GFXCanvas.parentNode == this.v.canvas.parentNode) {
+      window.initGFXCanvas(this, this.v.canvas);
+      console.log("replayer initializing gfx canvas");
+      console.log(this.v.canvas);
+    }
+
+    this.GFXQueue = [];
+
+    this.block_size = this.v.block_size;
+
+    this.GFXLoop = () => {
+      if (!this.GFXQueue) this.GFXQueue = [];
+
+      this.GFXctx.clearRect(0, 0, this.GFXCanvas.width, this.GFXCanvas.height);
+
+      this.GFXQueue = this.GFXQueue.filter(e => e.process.call(e, this.GFXctx));
+
+      if (this.GFXQueue.length)
+        requestAnimationFrame(this.GFXLoop);
+    }
+
+    this.v.canvas.parentNode.appendChild(this.GFXCanvas);
+
+    return val;
+  }
+
+  const oldLineClears = GameCore.prototype.checkLineClears;
+  GameCore.prototype.checkLineClears = function() {
+
+    //console.log(this.GFXCanvas);
+
+    if (!this.GFXCanvas || window.DISABLE_LINECLEAR_ANIMATION)
       return oldLineClears.apply(this, arguments);
 
-    }
-    // have to do this so we can properly override ReplayerCore
-    Replayer.prototype.checkLineClears = GameCore.prototype.checkLineClears;
+    let oldAttack = this.gamedata.attack;
 
-    Replayer.prototype.playSound = () => {
-      Game.prototype.playSound.apply({
-        ...this,
-        SEenabled: true,
-        R: {
-          sfx: true
+    for (var row = 0; row < 20; row++) {
+      var cleared = 0
+      for (var col = 0; col < 10; col++) {
+        let block = this.matrix[row][col];
+        if (9 === block) { // solid garbage
+          break;
+        };
+        if (0 !== block) {
+          cleared++
         }
-      }, arguments);
-    };
+      };
+      if (10 === cleared) {
+
+        let attack = this.gamedata.attack - oldAttack;
+
+        shake(this.GFXCanvas.parentNode, Math.min(1 + attack * 5, 50))
 
 
-    // placement animation
-    const oldPlaceBlock = GameCore.prototype.placeBlock
-    GameCore.prototype.placeBlock = function(col, row, time) {
 
-      if (!this.GFXCanvas || DISABLE_PLACE_BLOCK_ANIMATION)
-        return oldPlaceBlock.apply(this, arguments);
+        this.GFXQueue.push({
+          opacity: 1,
+          row,
+          blockSize: this.block_size,
+          amountParted: 0,
+          process: function(ctx) {
+            if (this.opacity <= 0)
+              return false;
 
-      const block = this.blockSets[this.activeBlock.set]
-        .blocks[this.activeBlock.id]
-        .blocks[this.activeBlock.rot];
+            var x1 = 1;
+            var x2 = this.blockSize * 5 + this.amountParted;
+            var y = 1 + this.row * this.blockSize;
 
-      let val = oldPlaceBlock.apply(this, arguments);
+            // Create gradient
+            var leftGradient = ctx.createLinearGradient(0, 0, this.blockSize * 5 - this.amountParted, 0);
+            leftGradient.addColorStop(0, `rgba(255,255,255,${this.opacity})`);
+            leftGradient.addColorStop(1, `rgba(255,170,0,0)`);
+            // Fill with gradient
+            ctx.fillStyle = leftGradient;
+            ctx.fillRect(x1, y, this.blockSize * 5 - this.amountParted, this.blockSize);
 
+            // Create gradient
+            var rightGradient = ctx.createLinearGradient(0, 0, this.blockSize * 5 - this.amountParted, 0);
+            rightGradient.addColorStop(0, `rgba(255,170,0,0)`);
+            rightGradient.addColorStop(1, `rgba(255,255,255,${this.opacity})`);
+            // Fill with gradient
+            ctx.fillStyle = rightGradient;
+            ctx.fillRect(x2, y, this.blockSize * 5 - this.amountParted, this.blockSize);
 
-      // flashes the piece once you place it
-      this.GFXQueue.push({
-        opacity: 0.5,
-        col,
-        row,
-        blockSize: this.block_size,
-        block,
-        process: function(ctx) {
-          if (this.opacity <= 0)
-            return false;
+            this.amountParted = window.lerp(this.amountParted, this.blockSize * 5, 0.3);
+            this.opacity -= 0.07;
 
-          ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
-          this.opacity -= 0.07;
-
-          for (var i = 0; i < this.block.length; i++) {
-            for (var j = 0; j < this.block[i].length; j++) {
-
-              if (!this.block[i][j])
-                continue;
-
-              var x = 1 + (this.col + j) * this.blockSize
-              var y = 1 + (this.row + i) * this.blockSize
-
-              ctx.fillRect(x, y, this.blockSize, this.blockSize);
-            }
+            return true;
           }
-          return true;
-        }
-      })
 
-      var trailLeftBorder = 10;
-      var trailRightBorder = 0;
-      var trailBottom = 0;
-      for (var i = 0; i < block.length; i++) {
-        for (var j = 0; j < block[i].length; j++) {
-          if (!block[i][j])
-            continue;
-          trailLeftBorder = Math.max(Math.min(trailLeftBorder, j), 0);
-          trailRightBorder = Math.min(Math.max(trailRightBorder, j), 10);
-          trailBottom = Math.max(trailBottom, i);
-        }
+        })
       }
-
-      // flashes the piece once you place it
-      this.GFXQueue.push({
-        opacity: 0.1,
-        col,
-        row,
-        blockSize: this.block_size,
-        trailTop: 1,
-        block,
-        trailLeftBorder,
-        trailRightBorder,
-        trailBottom,
-        process: function(ctx) {
-          if (this.opacity <= 0)
-            return false;
-
-          var {
-            trailLeftBorder,
-            trailRightBorder,
-            trailBottom
-          } = this;
-
-          var row = this.row + trailBottom
-
-          var gradient = ctx.createLinearGradient(0, 0, 0, row * this.blockSize - this.trailTop);
-          gradient.addColorStop(0, `rgba(255,255,255,0)`);
-          gradient.addColorStop(1, `rgba(255,255,255,${this.opacity})`);
-
-          // Fill with gradient
-          ctx.fillStyle = gradient;
-          ctx.fillRect((this.col + trailLeftBorder) * this.blockSize, this.trailTop, (trailRightBorder - trailLeftBorder + 1) * this.blockSize, row * this.blockSize - this.trailTop);
-
-          const middle = (trailLeftBorder + trailRightBorder) / 2
-
-          this.trailLeftBorder = window.lerp(trailLeftBorder, middle, 0.1);
-          this.trailRightBorder = window.lerp(trailRightBorder, middle, 0.1);
-
-          this.opacity -= 0.0125;
-
-          return true;
-        }
-      })
-
-
-
-      requestAnimationFrame(this.GFXLoop);
-
     }
-    // have to do this so we can properly override ReplayerCore
-    Replayer.prototype.placeBlock = GameCore.prototype.placeBlock;
-  })
+    return oldLineClears.apply(this, arguments);
+
+  }
+  // have to do this so we can properly override ReplayerCore
+  Replayer.prototype.checkLineClears = GameCore.prototype.checkLineClears;
+
+  Replayer.prototype.playSound = () => {
+    Game.prototype.playSound.apply({
+      ...this,
+      SEenabled: true,
+      R: {
+        sfx: true
+      }
+    }, arguments);
+  };
+
+
+  // placement animation
+  const oldPlaceBlock = GameCore.prototype.placeBlock
+  GameCore.prototype.placeBlock = function(col, row, time) {
+
+    if (!this.GFXCanvas || DISABLE_PLACE_BLOCK_ANIMATION)
+      return oldPlaceBlock.apply(this, arguments);
+
+    const block = this.blockSets[this.activeBlock.set]
+      .blocks[this.activeBlock.id]
+      .blocks[this.activeBlock.rot];
+
+    let val = oldPlaceBlock.apply(this, arguments);
+
+
+    // flashes the piece once you place it
+    this.GFXQueue.push({
+      opacity: 0.5,
+      col,
+      row,
+      blockSize: this.block_size,
+      block,
+      process: function(ctx) {
+        if (this.opacity <= 0)
+          return false;
+
+        ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+        this.opacity -= 0.07;
+
+        for (var i = 0; i < this.block.length; i++) {
+          for (var j = 0; j < this.block[i].length; j++) {
+
+            if (!this.block[i][j])
+              continue;
+
+            var x = 1 + (this.col + j) * this.blockSize
+            var y = 1 + (this.row + i) * this.blockSize
+
+            ctx.fillRect(x, y, this.blockSize, this.blockSize);
+          }
+        }
+        return true;
+      }
+    })
+
+    var trailLeftBorder = 10;
+    var trailRightBorder = 0;
+    var trailBottom = 0;
+    for (var i = 0; i < block.length; i++) {
+      for (var j = 0; j < block[i].length; j++) {
+        if (!block[i][j])
+          continue;
+        trailLeftBorder = Math.max(Math.min(trailLeftBorder, j), 0);
+        trailRightBorder = Math.min(Math.max(trailRightBorder, j), 10);
+        trailBottom = Math.max(trailBottom, i);
+      }
+    }
+
+    // flashes the piece once you place it
+    this.GFXQueue.push({
+      opacity: 0.1,
+      col,
+      row,
+      blockSize: this.block_size,
+      trailTop: 1,
+      block,
+      trailLeftBorder,
+      trailRightBorder,
+      trailBottom,
+      process: function(ctx) {
+        if (this.opacity <= 0)
+          return false;
+
+        var {
+          trailLeftBorder,
+          trailRightBorder,
+          trailBottom
+        } = this;
+
+        var row = this.row + trailBottom
+
+        var gradient = ctx.createLinearGradient(0, 0, 0, row * this.blockSize - this.trailTop);
+        gradient.addColorStop(0, `rgba(255,255,255,0)`);
+        gradient.addColorStop(1, `rgba(255,255,255,${this.opacity})`);
+
+        // Fill with gradient
+        ctx.fillStyle = gradient;
+        ctx.fillRect((this.col + trailLeftBorder) * this.blockSize, this.trailTop, (trailRightBorder - trailLeftBorder + 1) * this.blockSize, row * this.blockSize - this.trailTop);
+
+        const middle = (trailLeftBorder + trailRightBorder) / 2
+
+        this.trailLeftBorder = window.lerp(trailLeftBorder, middle, 0.1);
+        this.trailRightBorder = window.lerp(trailRightBorder, middle, 0.1);
+
+        this.opacity -= 0.0125;
+
+        return true;
+      }
+    })
+
+
+
+    requestAnimationFrame(this.GFXLoop);
+
+  }
+  // have to do this so we can properly override ReplayerCore
+  Replayer.prototype.placeBlock = GameCore.prototype.placeBlock;
 
   // modal UI inject
   //var img = document.createElement("IMG");
