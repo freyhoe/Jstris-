@@ -140,7 +140,6 @@
       };
       ws.onmessage = (event) => {
         let res = JSON.parse(event.data)
-        console.log(event.data)
         if (res.type == "room") {
           status = UI_STATUS.idle
           window.joinRoom(res.rid)
