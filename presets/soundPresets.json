@@ -345,5 +345,82 @@
         }
       ]
     }
+  },
+  {
+    "name": "Tetris Battle Sound Pack",
+    "harddrop": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_lock.wav",
+    "rotate": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_rotate.mp3",
+    "lock": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_lock.wav",
+    "ready": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_ready.wav",
+    "go": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_go.wav",
+    "died": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_died.wav",
+    "move": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_move.wav",
+    "golive": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_go.mp3",
+    "comboTones": {
+      "url": "https://ecdldaiiere.github.io/Eddiez-Soundz/TBcombo.mp3",
+      "abs": 1,
+      "set": 2,
+      "duration": 1000,
+      "spacing": 500,
+      "cnt": 20
+    },
+    "scoring": {
+      "CLEAR1": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear1.wav",
+      "CLEAR2": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear2.wav",
+      "CLEAR3": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear3.wav",
+      "CLEAR4": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear4.wav",
+      "TSPIN_MINI_SINGLE": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_tspinmini.wav",
+      "TSPIN_SINGLE": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_tspinsingle.wav",
+      "TSPIN_DOUBLE": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_tspindouble.wav",
+      "TSPIN_TRIPLE": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_tspintriple.wav",
+      "PERFECT_CLEAR": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_perfectclear.wav"
+    },
+    "specialScoring": {
+      "ALLSPIN": [
+        {
+          "url": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear3.wav",
+          "b2b": true
+        },
+        {
+          "url": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_clear3.wav",
+          "b2b": false
+        }
+      ],
+      "TSPIN_MINI_SINGLE": [
+        {
+          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "b2b": true,
+          "override": false
+        }
+      ],
+      "TSPIN_SINGLE": [
+        {
+          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "b2b": true,
+          "override": false
+        }
+      ],
+      "TSPIN_DOUBLE": [
+        {
+          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "b2b": true,
+          "override": false
+        }
+      ],
+      "TSPIN_TRIPLE": [
+        {
+          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "b2b": true,
+          "override": false
+        }
+      ],
+      "CLEAR4": [
+        {
+          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "b2b": true,
+          "override": false
+        }
+      ]
+    }
   }
 ]
