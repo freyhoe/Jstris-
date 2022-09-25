@@ -355,7 +355,7 @@
     "go": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_go.wav",
     "died": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_died.wav",
     "move": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_move.wav",
-    "golive": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_go.mp3",
+    "golive": "https://ecdldaiiere.github.io/Eddiez-Soundz/TB_go.wav",
     "comboTones": {
       "url": "https://ecdldaiiere.github.io/Eddiez-Soundz/TBcombo.mp3",
       "abs": 1,
@@ -388,35 +388,35 @@
       ],
       "TSPIN_MINI_SINGLE": [
         {
-          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "url": "https://github.com/freyhoe/Jstris-/blob/main/sfx/TB_clearbtb.mp3",
           "b2b": true,
           "override": false
         }
       ],
       "TSPIN_SINGLE": [
         {
-          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "url": "https://github.com/freyhoe/Jstris-/blob/main/sfx/TB_clearbtb.mp3",
           "b2b": true,
           "override": false
         }
       ],
       "TSPIN_DOUBLE": [
         {
-          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "url": "https://github.com/freyhoe/Jstris-/blob/main/sfx/TB_clearbtb.mp3",
           "b2b": true,
           "override": false
         }
       ],
       "TSPIN_TRIPLE": [
         {
-          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "url": "https://github.com/freyhoe/Jstris-/blob/main/sfx/TB_clearbtb.mp3",
           "b2b": true,
           "override": false
         }
       ],
       "CLEAR4": [
         {
-          "url": "https://cdn.discordapp.com/attachments/753114998384885760/1022893483679301642/clearbtb.mp3",
+          "url": "https://github.com/freyhoe/Jstris-/blob/main/sfx/TB_clearbtb.mp3",
           "b2b": true,
           "override": false
         }
