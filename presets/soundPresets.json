@@ -1,5 +1,75 @@
 [
   {
+    "name": "Tetra Online Sound Pack",
+    "rotate": "https://thewaxmango.github.io/Tetra-Online-Sounds/rotate.ogg",
+    "land": "https://thewaxmango.github.io/Tetra-Online-Sounds/land.ogg",
+    "harddrop": "https://thewaxmango.github.io/Tetra-Online-Sounds/harddroplock.ogg",
+    "lock": "https://thewaxmango.github.io/Tetra-Online-Sounds/lock.ogg",
+    "ready": "https://thewaxmango.github.io/Tetra-Online-Sounds/ready.ogg",
+    "go": "https://thewaxmango.github.io/Tetra-Online-Sounds/go.ogg",
+    "died": "https://thewaxmango.github.io/Tetra-Online-Sounds/boardfall.ogg",
+    "hold": "https://thewaxmango.github.io/Tetra-Online-Sounds/hold.ogg",
+    "move": "https://thewaxmango.github.io/Tetra-Online-Sounds/move.ogg",
+    "golive": "https://thewaxmango.github.io/Tetra-Online-Sounds/go.ogg",
+    "b2b": "https://thewaxmango.github.io/Tetra-Online-Sounds/b2b.ogg",
+    "comboTones": [
+      null,
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren1.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren2.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren3.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren4.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren5.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren6.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren7.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren8.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren9.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren10.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren11.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren12.ogg",
+      "https://thewaxmango.github.io/Tetra-Online-Sounds/ren13.ogg"
+    ],
+    "scoring": {
+      "CLEAR1": "https://thewaxmango.github.io/Tetra-Online-Sounds/erase1.ogg",
+      "CLEAR2": "https://thewaxmango.github.io/Tetra-Online-Sounds/erase2.ogg",
+      "CLEAR3": "https://thewaxmango.github.io/Tetra-Online-Sounds/erase3.ogg",
+      "CLEAR4": "https://thewaxmango.github.io/Tetra-Online-Sounds/erase4.ogg",
+      "TSPIN": "https://thewaxmango.github.io/Tetra-Online-Sounds/prespin.ogg",
+      "TSPIN_MINI": "https://thewaxmango.github.io/Tetra-Online-Sounds/prespinmini.ogg",
+      "TSPIN_MINI_SINGLE": "https://thewaxmango.github.io/Tetra-Online-Sounds/tspin1mini.ogg",
+      "TSPIN_SINGLE": "https://thewaxmango.github.io/Tetra-Online-Sounds/tspin1.ogg",
+      "TSPIN_DOUBLE": "https://thewaxmango.github.io/Tetra-Online-Sounds/tspin2.ogg",
+      "TSPIN_TRIPLE": "https://thewaxmango.github.io/Tetra-Online-Sounds/tspin3.ogg",
+      "PERFECT_CLEAR": "https://thewaxmango.github.io/Tetra-Online-Sounds/bravo.ogg"
+    },
+    "specialScoring": {
+      "ALLSPIN": [
+        {
+          "url": "https://thewaxmango.github.io/Tetra-Online-Sounds/b2b.ogg",
+          "b2b": true,
+          "override": false
+        },
+        {
+          "url": "https://thewaxmango.github.io/Tetra-Online-Sounds/tspin1.ogg",
+          "b2b": false
+        }
+      ],
+      "CLEAR4": [
+        {
+          "url": "https://thewaxmango.github.io/Tetra-Online-Sounds/b2b.ogg",
+          "b2b": true,
+          "override": false
+        }
+      ],
+      "TSPINORTETRIS": [
+        {
+          "url": "https://thewaxmango.github.io/Tetra-Online-Sounds/b2b.ogg",
+          "b2b": true,
+          "override": false
+        }
+      ]
+    }
+  },
+  {
     "name": "Tetrio Sound Pack",
     "rotate": "https://ecdldaiiere.github.io/Eddiez-Soundz/Tetrio_rotate.mp3",
     "land": "https://freyhoe.github.io/Jstris-/sfxPacks/tetrio/floor.ogg",
