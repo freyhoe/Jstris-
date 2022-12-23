@@ -9,4 +9,7 @@
     "READY": "https://freyhoe.github.io/Jstris-/sfx/ready.wav",
     "PB": "https://freyhoe.github.io/Jstris-/sfx/personalBest.wav",
   },
+  {
+    "name": "None",
+  },
 ]
