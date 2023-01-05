@@ -1,16 +1,16 @@
 [
   {
-    "name": "AzuraHorizons",
+    "name": "AzuraHorizons (F)",
     "READY": "https://freyhoe.github.io/Jstris-/sfx/readyAzura.wav",
     "PB": "https://freyhoe.github.io/Jstris-/sfx/personalBestAzura.wav"
   },
   {
-    "name": "Dalicious",
+    "name": "Dalicious (M)",
     "READY": "https://freyhoe.github.io/Jstris-/sfx/ready.wav",
     "PB": "https://freyhoe.github.io/Jstris-/sfx/personalBest.wav"
   },
   {
-    "name": "Sinewave",
+    "name": "Sinewave (M)",
     "READY": "https://freyhoe.github.io/Jstris-/sfx/readySine.wav",
     "PB": "https://freyhoe.github.io/Jstris-/sfx/personalBestSine.wav"
   },
